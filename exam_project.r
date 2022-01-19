@@ -174,3 +174,17 @@ summary(lm.subdens) # Adjusted R-squared:  -0.01443
 
 lm.watercont <-lm(s.richness ~ WaterCont, data = var)
 summary(lm.watercont) # Adjusted R-squared:  0.479 
+
+chisq <- chisq.test(sr.sb)
+chisq
+
+
+
+par(mfrow=c(1,2))
+cor.sr.sb <- cor(sr.sb)
+corrplot(cor.sr.sb, type="upper", order="hclust",
+         col=brewer.pal(n=8, name="RdYlBu"))
+
+cor.sr.wc <-cor(sr.wc)
+corrplot(cor.sr.wc, type="upper", order="hclust",
+         col=brewer.pal(n=8, name="RdYlBu"))
