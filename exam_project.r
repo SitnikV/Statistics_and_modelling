@@ -148,17 +148,27 @@ labs(title = "Boxplot of species richness distribution in respect to Topography"
 # Plot the distribution of species richness in respect with the available numeric environmental variables
 install.packages("corrplot")
 install.packages("RColorBrewer")
-library(corrplot)
-library(RColorBrewer)
-library(vegan)
+library(ggplot2) # for graphs
+library(corrplot) # to plot correlation
+library(RColorBrewer) # to change the colours in the graphs
+library(vegan) # to check ?mite
 ?mite
 s.richness <- var$sr
 SubDens <-var$SubsDens
 WaterCont <-var$WatrCont
 sr.sb <- data.frame(SubDens,s.richness)
 sr.wc <- data.frame(WaterCont, s.richness)
+
+
+
 plot(sr.sb,main="Looking for correlation", 
-     xlab="Substrate density ", ylab=" Species richness", pch=19)
+     xlab="Substrate density ", ylab=" Species richness", pch=19) +
+ggplot(var, aes(x = WatrCont, y = s.richness)) +   # this is to add regression line
+  geom_point() +
+  stat_smooth(method = "lm", col = "red") +
+  labs(title = "Linear model plot",
+       x = "Water content",
+       y = "Species richness")
 
 plot(sr.sb,main="Looking for correlation", 
      xlab="Water content of the substrate (g/L)", 
@@ -188,3 +198,25 @@ corrplot(cor.sr.sb, type="upper", order="hclust",
 cor.sr.wc <-cor(sr.wc)
 corrplot(cor.sr.wc, type="upper", order="hclust",
          col=brewer.pal(n=8, name="RdYlBu"))
+
+
+### Playing around with the plots a bit ###
+
+library(corrplot)
+new_data <-var[,c(1:2,6)]
+correlation <- cor(new_data)
+corrplot(correlation, order = 'AOE',col=brewer.pal(n=8, name="RdYlBu")) # n corresponds to the number values grouped by colours i.e. how precisely the colour represents the correlation.
+
+
+### or if you want to remove the middle values ###
+
+corrplot(correlation, order = 'AOE',
+         col = COL2('RdBu', 10),
+         diag = F)
+
+# change colours
+corrplot(correlation, order = 'AOE',
+       col=brewer.pal(n=5, name="RdYlBu"),
+         diag = F)
+
+
